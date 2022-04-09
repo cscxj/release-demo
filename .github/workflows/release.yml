@@ -1,0 +1,35 @@
+on:
+  push:
+    tags:
+      - "v*"
+
+name: release
+
+jobs:
+  release:
+    name: Publish to GitHub and NPM # 创建 github release
+    runs-on: ubuntu-latest
+    environment: release
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+
+      - name: Create Release for Tag
+        id: create_release
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Publish to NPM # 发布到npm，需要在secrets中配置NPM_ACCESS_TOKEN
+        id: publish_npm
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
+        if: env.NPM_TOKEN != ''
+        run: |
+          npm config set //registry.npmjs.org/:_authToken=$NPM_TOKEN
+          npm publish --access public

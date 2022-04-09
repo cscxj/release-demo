@@ -1,0 +1,14 @@
+{
+  "name": "release-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "release": "npm version prerelease -m \"release: %s\" && git push --tag",
+    "release:major": "npm version major -m \"release: %s\" && git push --tag",
+    "release:minor": "npm version minor -m \"release: %s\" && git push --tag",
+    "release:patch": "npm version patch -m \"release: %s\" && git push --tag"
+  },
+  "author": "",
+  "license": "ISC"
+}
